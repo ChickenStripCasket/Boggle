@@ -31,6 +31,9 @@ class Combinations():
     def depth_first_search(self, row, column, visited_path, current_combination):
        
         letter = self.board[row][column]
+        #enforcing "Qu" rule:
+        if letter == 'Q':
+            letter += "U"
         visited_path.append((row, column))
 
         current_combination += letter
