@@ -31,9 +31,26 @@ class Game():
         self.solve()
         print(f"{len(self.valid_combinations)} valid combinations: {sorted(self.valid_combinations)}")
 
+    def get_valid_cominations(self):
+        return self.valid_combinations
+    
+    def check_word(self, word):
+        if word in self.valid_combinations:
+            return True
+        else:
+            return False
+    
+    def test(self):
+        word = input("Enter a word: ").upper()
+        if self.check_word(word) == True:
+            print("valid word")
+        else:
+            print("invalid word")
+        
 def main():
     game = Game()
     game.print_solution()
-
+    game.test()
+        
 if __name__ == '__main__':
     main()
