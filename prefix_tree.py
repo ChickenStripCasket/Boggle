@@ -11,7 +11,6 @@ class PrefixTree:
             for string in strings:
                 self.insert(string)
 
-
     def is_empty(self):
         if self.size == 0:
             return True
@@ -62,7 +61,7 @@ class PrefixTree:
         return completions
 
     def strings(self):
-        """Return a list of all strings stored in this prefix tree."""
+        #Return a list of all strings stored in this prefix tree.
         all_strings = []
         self._traverse(self.root, "", all_strings.append)
         return all_strings
