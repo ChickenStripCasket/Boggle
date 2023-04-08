@@ -1,5 +1,3 @@
-from generate_board import generate_board
-
 class Combinations():
     def __init__(self, board, prefix_tree):
         self.board = board
