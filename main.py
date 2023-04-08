@@ -12,7 +12,9 @@ class Game():
         self.dictionary = self.get_lines("boggle_dict.txt")
         self.prefix_tree = PrefixTree()
         for word in self.dictionary:
-            self.prefix_tree.insert(word)
+            #words must 3 letters
+            if len(word) >= 3:
+                self.prefix_tree.insert(word)
         self.combination_instance = Combinations(self.game_board, self.prefix_tree)
         self.all_combinations = self.combination_instance.all_searches()
         self.valid_combinations = []
