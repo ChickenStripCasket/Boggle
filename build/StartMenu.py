@@ -17,10 +17,10 @@ title_text = title_font.render('Boggle!', True, 'white')
 title_rect = pygame.Rect(375, 100, 200, 60)
 
 quit_text = font.render('Quit', True, 'white')
-quit_button = pygame.Rect(150, 600, 200, 60)
+quit_button = pygame.Rect(650, 315, 200, 60)
 
-bckgrd_rec1 = pygame.Rect(150, 210, 200, 235)
-bckgrd_rec2 = pygame.Rect(650, 210, 200, 235)
+bckgrd_rec1 = pygame.Rect(145, 205, 210, 305)
+bckgrd_rec2 = pygame.Rect(645, 205, 210, 175)
 
 one_plyr_txt = font.render('1-Player', True, 'white')
 one_plyr_btn = pygame.Rect(150, 210, 200, 100)
@@ -36,15 +36,6 @@ hard_button = pygame.Rect(150, 445, 200, 60)
 
 two_plyr_txt = font.render('2-Player', True, 'white')
 two_plyr_btn = pygame. Rect(650, 210, 200, 100)
-
-one_min_txt = font.render('1 min(s)', True, 'white')
-one_min_btn = pygame.Rect(650, 315, 200, 60)
-
-two_min_txt = font.render('2 min(s)', True, 'white')
-two_min_btn = pygame.Rect(650, 380, 200, 60)
-
-three_min_txt = font.render('3 min(s)', True, 'white')
-three_min_btn = pygame.Rect(650, 445, 200, 60)
 
 hourglass_img = pygame.image.load('hourglass.png')
 fits_hrgls_img = pygame.transform.scale(hourglass_img, (100, 225))
@@ -69,6 +60,18 @@ while running:
         pygame.draw.rect(screen, (110, 110, 110), quit_button)
     screen.blit(quit_text, (quit_button.x + 5, quit_button.y + 5))
 
+    if one_plyr_btn.x <= a <= one_plyr_btn.x + 200 and one_plyr_btn.y <= b <= one_plyr_btn.y + 100:
+        pygame.draw.rect(screen, (180, 180, 180), one_plyr_btn)
+    else:
+        pygame.draw.rect(screen, (110, 110, 110), one_plyr_btn)
+    screen.blit(one_plyr_txt, (one_plyr_btn.x + 5, one_plyr_btn.y + 5))
+
+    if two_plyr_btn.x <= a <= two_plyr_btn.x + 200 and two_plyr_btn.y <= b <= two_plyr_btn.y + 100:
+        pygame.draw.rect(screen, (180, 180, 180), two_plyr_btn)
+    else:
+        pygame.draw.rect(screen, (110, 110, 110), two_plyr_btn)
+    screen.blit(two_plyr_txt, (two_plyr_btn.x + 5, two_plyr_btn.y + 5))
+
     if easy_button.x <= a <= easy_button.x + 200 and easy_button.y <= b <= easy_button.y + 60:
         pygame.draw.rect(screen, (180, 180, 180), easy_button)
     else:
@@ -87,29 +90,9 @@ while running:
         pygame.draw.rect(screen, (110, 110, 110), hard_button)
     screen.blit(hard_btn_txt, (hard_button.x + 5, hard_button.y + 5))
 
-    if one_min_btn.x <= a <= one_min_btn.x + 200 and one_min_btn.y <= b <= one_min_btn.y + 60:
-        pygame.draw.rect(screen, (180, 180, 180), one_min_btn)
-    else:
-        pygame.draw.rect(screen, (110, 110, 110), one_min_btn)
-    screen.blit(one_min_txt, (one_min_btn.x + 5, one_min_btn.y + 5))
-
-    if two_min_btn.x <= a <= two_min_btn.x + 200 and two_min_btn.y <= b <= two_min_btn.y + 60:
-        pygame.draw.rect(screen, (180, 180, 180), two_min_btn)
-    else:
-        pygame.draw.rect(screen, (110, 110, 110), two_min_btn)
-    screen.blit(two_min_txt, (two_min_btn.x + 5, two_min_btn.y + 5))
-
-    if three_min_btn.x <= a <= three_min_btn.x + 200 and three_min_btn.y <= b <= three_min_btn.y + 60:
-        pygame.draw.rect(screen, (180, 180, 180), three_min_btn)
-    else:
-        pygame.draw.rect(screen, (110, 110, 110), three_min_btn)
-    screen.blit(three_min_txt, (three_min_btn.x + 5, three_min_btn.y + 5))
 
     pygame.draw.rect(screen, (background_color), title_rect)
     screen.blit(title_text, (title_rect.x + 5, title_rect.y + 5))
-    pygame.draw.rect(screen, (110, 110, 110), one_plyr_btn)
-    screen.blit(one_plyr_txt, (one_plyr_btn.x + 5, one_plyr_btn.y + 5))
-    pygame.draw.rect(screen, (110, 110, 110), two_plyr_btn)
-    screen.blit(two_plyr_txt, (two_plyr_btn.x + 5, two_plyr_btn.y + 5))
+    
     
     pygame.display.update()        
