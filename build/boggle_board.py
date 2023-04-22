@@ -1,15 +1,16 @@
 import pygame
-import time
+from pprint import pprint
+import tkinter
+
+from generate_board import generate_board
+from prefix_tree import PrefixTree
+from combinations import Combinations
+
 class Board_Screen():
     def __init__(self,players=False,setting=1):
         pygame.init()
         if(players):
-            if(setting==1):
-                print("2P 1M")
-            if(setting==2):
-                print("2P 2M")
-            if(setting==3):
-                print("2P 3M")
+            print("2P")
         else:
             if(setting==1):
                 print("1P E")
@@ -19,7 +20,19 @@ class Board_Screen():
                 print("1P H")
         screen_height = 800
         screen_width = 1000
+        self.game_board=generate_board(4)
+        #"C:\\Users\\crmoo\\Documents\\GitHub\\Boggle\\build\\platformerGraphics_gui_text\\Individual\\Upper_A.png"
+        #pygame.image.load(self.getLetterImage('a'))
+        board_images = []
+        i=0
+        for x in self.game_board:
+            for k in x:
+                board_images.append(pygame.image.load(Board_Screen.getLetterImage(self,k)))
+                i+=1
+        
+        entryBox = tkinter.Entry()
 
+        pprint(self.game_board)
         background_color = (0, 76, 153)
 
         screen = pygame.display.set_mode((screen_width, screen_height))
@@ -45,15 +58,28 @@ class Board_Screen():
             count+=1
 
         running = True
-        startTime=time.time()
-        clock=-1
+        clock = pygame.time.Clock()
+        secondTimer = 1000
+        timeLimit = 1000*60*3
+        pygame.time.set_timer(pygame.QUIT,timeLimit,1)
         while running:
-            newTime=time.time()
+            #Clock prints time since start every second
+            clock.tick(60)
+            timeLimit -= clock.get_time()
+            secondTimer+=clock.get_time()
+            if(secondTimer>1000):
+                secondTimer-=1000
+                print(timeLimit//1000)
             screen.fill(background_color)
+
             screen_divider1 = pygame.draw.line(screen, 0, (screen_width/3,0), (screen_width/3,screen_height), 4)
             screen_divider2 = pygame.draw.line(screen, 0, (0,(screen_height/4)*3), (screen_width/3,(screen_height/4)*3), 4)
+            i=0
             for x in boggle_squares:
                 pygame.draw.rect(screen, 0, x, 2)
+                screen.blit(board_images[i],x)
+                i+=1
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -62,13 +88,13 @@ class Board_Screen():
                     if quit_button.collidepoint(event.pos):
                         pygame.quit()
             a, b = pygame.mouse.get_pos()
-            #Clock printing and closing game after time limit
-            if((newTime-startTime)>(setting*60)):
-                running=False
-            elif(int(newTime-startTime)!=clock):
-                clock=int(newTime-startTime)
-                print(setting*60-clock)
             pygame.display.update()
+    
+    def getLetterImage(self,cha):
+        #pathToFile is just here so the files will display. I have no clue how to make the files display with specifying the whole filepath
+        pathToFile="C:\\Users\\crmoo\\Documents\\GitHub\\Boggle\\build\\platformerGraphics_gui_text\\Individual\\"
+        return pathToFile+"Upper_"+cha.upper()+".png"
+
             
 #This is just here to open the screen when this program is called
 Board_Screen(True,1)
