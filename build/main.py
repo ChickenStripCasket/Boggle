@@ -52,7 +52,8 @@ class Game():
 def main():
     game = Game()
     game.print_solution()
-    game.test()
+    # for i in range(0,len(game.get_valid_cominations())-1):
+    #     game.test()
         
 if __name__ == '__main__':
     main()
