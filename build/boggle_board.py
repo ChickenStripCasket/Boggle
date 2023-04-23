@@ -94,9 +94,10 @@ class Board_Screen():
                         # get text input from 0 to -1 i.e. end.
                         user_text = user_text[:-1]
                     elif event.key ==pygame.K_RETURN:
+                        print(boggle_game.check_word(user_text.upper()))
                         if(boggle_game.check_word(user_text.upper())):
                             correct_words=correct_words+" "+user_text.upper()
-                        print(boggle_game.check_word(user_text.upper()))
+                            user_text=""
                     # Unicode standard is used for string
                     # formation
                     else:
