@@ -113,7 +113,7 @@ class Board_Screen():
     
     def getLetterImage(self,cha):
         #pathToFile is just here so the files will display. I have no clue how to make the files display with specifying the whole filepath
-        pathToFile="C:\\Users\\zackl\\Documents\\GitHub\\Boggle\\build\\platformerGraphics_gui_text\\Individual\\"
+        pathToFile="platformerGraphics_gui_text\\Individual\\"
         return pathToFile+"Upper_"+cha.upper()+".png"
 
             
