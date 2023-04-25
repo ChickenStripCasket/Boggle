@@ -163,7 +163,7 @@ class Start_Screen():
 class Board_Screen():
     def __init__(self, players=False, setting=1, size=4):
         self.CurrentState = False
-        boggle_game = Game(size)
+        boggle_game = Game()
         boggle_game.print_solution()
         if(players):
             print("2P")

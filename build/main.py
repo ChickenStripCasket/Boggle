@@ -6,8 +6,8 @@ from combinations import Combinations
 
 
 class Game():
-    def __init__(self, size=4):
-        self.game_board = generate_board(size)
+    def __init__(self):
+        self.game_board = generate_board()
         pprint(self.game_board)
         self.dictionary = self.get_lines("boggle_dict.txt")
         self.prefix_tree = PrefixTree()
