@@ -205,7 +205,6 @@ class Board_Screen():
             count+=1
         
         correct_words = ''
-        boxLengthCounter = 0
         entry_box = pygame.Rect(0,screen_height*3/4,screen_width/3,screen_height/4)
         text_box = pygame.Rect(0,0,screen_width/3,screen_height*3/4)
 
@@ -251,11 +250,7 @@ class Board_Screen():
                     elif event.key ==pygame.K_RETURN:
                         print(boggle_game.check_word(user_text.upper()))
                         if(boggle_game.check_word(user_text.upper()) and not self.wordInString(correct_words,user_text.upper())):
-                            if boxLengthCounter+len(user_text)>=17:
-                                correct_words=correct_words+"\n"
-                                boxLengthCounter-=17
                             correct_words=correct_words+" "+user_text.upper()
-                            boxLengthCounter+=len(user_text)
                             user_text=""
                     # Unicode standard is used for string
                     # formation
@@ -264,8 +259,10 @@ class Board_Screen():
             entry_text = font.render(user_text, True, (255, 255, 255))
             words_text = font.render(correct_words, True, (255, 255, 255))
             # render at position stated in arguments
-            screen_boggle.blit(words_text, (text_box.x+5, text_box.y+5))
-            screen_boggle.blit(entry_text, (entry_box.x+5, entry_box.y+5))
+            self.drawText(screen_boggle,user_text,'White',entry_box,font)
+            self.drawText(screen_boggle,correct_words,'White',text_box,font)
+            #screen_boggle.blit(words_text, (text_box.x+5, text_box.y+5))
+            #screen_boggle.blit(entry_text, (entry_box.x+5, entry_box.y+5))
 
             a, b = pygame.mouse.get_pos()
             pygame.display.update()
@@ -278,12 +275,50 @@ class Board_Screen():
     def wordInString(self,checkString,word):
         stringArray = []
         stringArray = checkString.split()
-        print(stringArray)
         for x in stringArray:
             if x == word:
                 return True
             else:
                 return False
+    
+    #method taken from https://www.pygame.org/wiki/TextWrap
+    def drawText(self, surface, text, color, rect, font, aa=False, bkg=None):
+        rect = pygame.Rect(rect)
+        y = rect.top
+        lineSpacing = -2
+
+        # get the height of the font
+        fontHeight = font.size("Tg")[1]
+
+        while text:
+            i = 1
+
+            # determine if the row of text will be outside our area
+            if y + fontHeight > rect.bottom:
+                break
+
+            # determine maximum width of line
+            while font.size(text[:i])[0] < rect.width and i < len(text):
+                i += 1
+
+            # if we've wrapped the text, then adjust the wrap to the last word      
+            if i < len(text): 
+                i = text.rfind(" ", 0, i) + 1
+
+            # render the line and blit it to the surface
+            if bkg:
+                image = font.render(text[:i], 1, color, bkg)
+                image.set_colorkey(bkg)
+            else:
+                image = font.render(text[:i], aa, color)
+
+            surface.blit(image, (rect.left, y))
+            y += fontHeight + lineSpacing
+
+            # remove the text we just blitted
+            text = text[i:]
+
+        return text
 
 done = False
 while not done:
