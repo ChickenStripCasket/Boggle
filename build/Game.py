@@ -160,7 +160,6 @@ class Start_Screen():
             self.screen.fill(self.fill)
     
 
-
 class Board_Screen():
     def __init__(self, players=False, setting=1, size=4):
         self.CurrentState = False
@@ -236,11 +235,16 @@ class Board_Screen():
         text_box = pygame.Rect(0,0,screen_width/3,screen_height*3/4)
 
         running2 = True
+        SCREENEVENT = pygame.USEREVENT + 1
+        
         clock = pygame.time.Clock()
         secondTimer = 1000
         timeLimit = 1000*60*3
         #pygame.time.set_timer(pygame.QUIT,timeLimit,1)
         done = False
+        timeLimit = 1000*10#1000*60*3
+        pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
+
 
         while running2:
             screen_boggle.fill(background_color)
@@ -265,6 +269,9 @@ class Board_Screen():
                 correct_words="You have a score of "+str(score)+" with the words: "+correct_words+". The computer has a score of "+str(len(ai_words.split()))+" with the words: "+ai_words
                 done = True
             for event in pygame.event.get():
+                if pygame.event.get(SCREENEVENT):
+                    Intermin_Screen()
+                    
                 if event.type == pygame.QUIT:
                     running = False
                     pygame.quit()
@@ -343,9 +350,43 @@ class Board_Screen():
             text = text[i:]
 
         return text
+    
+class Intermin_Screen():
+    def __init__(self):
+        pygame.display.quit()
+        pygame.display.init()
+        screen = pygame.display.set_mode((screen_width, screen_height))
+        pygame.display.set_caption('Player 2 prompt')
+        pygame.display.flip()
+
+        font = pygame.font.SysFont('Georgia', 50, bold = True)
+        prompt_text1 = font.render('Player 2', True, 'white')
+        prompt_text2 = font.render('Press Enter when ready', True, 'white')
+
+        title_rec = pygame.Rect(375, 100, 200, 60)
+
+        running3 = True
+        while running3:
+            screen.fill(background_color)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running3 = False
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        pygame.display.quit()
+
+            pygame.draw.rect(screen, (background_color), title_rec)
+            screen.blit(prompt_text1, (title_rec.x + 5, title_rec.y + 5))
+            screen.blit(prompt_text2, (title_rec.x - 175, title_rec.y + 50))
+            
+            pygame.display.update()
+        
+
 
 done = False
 while not done:
+    #Intermin_Screen()
     Start_Screen().screenUpdate()
     for events in pygame.events.get():
         if events.type == pygame.MOUSEBUTTONDOWN:
