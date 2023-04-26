@@ -191,7 +191,7 @@ class Board_Screen():
         pygame.display.set_caption('Boggle!')
         pygame.display.flip()
 
-        font = pygame.font.SysFont('Georgia', 40, bold = True)
+        font = pygame.font.SysFont('Georgia', 24, bold = True)
 
         user_text = ''
 
@@ -205,6 +205,7 @@ class Board_Screen():
             count+=1
         
         correct_words = ''
+        boxLengthCounter = 0
         entry_box = pygame.Rect(0,screen_height*3/4,screen_width/3,screen_height/4)
         text_box = pygame.Rect(0,0,screen_width/3,screen_height*3/4)
 
@@ -249,8 +250,12 @@ class Board_Screen():
                         user_text = user_text[:-1]
                     elif event.key ==pygame.K_RETURN:
                         print(boggle_game.check_word(user_text.upper()))
-                        if(boggle_game.check_word(user_text.upper())):
+                        if(boggle_game.check_word(user_text.upper()) and not self.wordInString(correct_words,user_text.upper())):
+                            if boxLengthCounter+len(user_text)>=17:
+                                correct_words=correct_words+"\n"
+                                boxLengthCounter-=17
                             correct_words=correct_words+" "+user_text.upper()
+                            boxLengthCounter+=len(user_text)
                             user_text=""
                     # Unicode standard is used for string
                     # formation
@@ -269,6 +274,16 @@ class Board_Screen():
         #pathToFile is just here so the files will display. I have no clue how to make the files display with specifying the whole filepath
         pathToFile="platformerGraphics_gui_text\\Individual\\"
         return pathToFile+"Upper_"+cha.upper()+".png"
+
+    def wordInString(self,checkString,word):
+        stringArray = []
+        stringArray = checkString.split()
+        print(stringArray)
+        for x in stringArray:
+            if x == word:
+                return True
+            else:
+                return False
 
 done = False
 while not done:
