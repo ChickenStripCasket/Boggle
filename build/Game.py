@@ -1,6 +1,7 @@
 import pygame
 from pprint import pprint
 
+from random import Random
 from generate_board import generate_board
 from main import *
 from prefix_tree import PrefixTree
@@ -165,15 +166,39 @@ class Board_Screen():
         self.CurrentState = False
         boggle_game = Game()
         boggle_game.print_solution()
+        #AI and Two Players
+        rand = Random()
         if(players):
             print("2P")
         else:
+            ai_words = ""
             if(setting==1):
                 print("1P E")
+                ai_words_count=(rand.randint(5,15)*len(boggle_game.valid_combinations)//100)
+                while ai_words_count>0:
+                    possible_word = boggle_game.valid_combinations[rand.randint(0,len(boggle_game.valid_combinations)-1)]
+                    if(not self.wordInString(ai_words,possible_word)):
+                        ai_words+= " "+possible_word
+                        ai_words_count-=1
+                print(ai_words)
             if(setting==2):
                 print("1P M")
+                ai_words_count=(rand.randint(15,25)*len(boggle_game.valid_combinations)//100)
+                while ai_words_count>0:
+                    possible_word = boggle_game.valid_combinations[rand.randint(0,len(boggle_game.valid_combinations)-1)]
+                    if(not self.wordInString(ai_words,possible_word)):
+                        ai_words+= " "+possible_word
+                        ai_words_count-=1
+                print(ai_words)
             if(setting==3):
                 print("1P H")
+                ai_words_count=(rand.randint(25,45)*len(boggle_game.valid_combinations)//100)
+                while ai_words_count>0:
+                    possible_word = boggle_game.valid_combinations[rand.randint(0,len(boggle_game.valid_combinations)-1)]
+                    if(not self.wordInString(ai_words,possible_word)):
+                        ai_words+= " "+possible_word
+                        ai_words_count-=1
+                print(ai_words)
                 
         #"C:\\Users\\crmoo\\Documents\\GitHub\\Boggle\\build\\platformerGraphics_gui_text\\Individual\\Upper_A.png"
         #pygame.image.load(self.getLetterImage('a'))
@@ -194,6 +219,7 @@ class Board_Screen():
         font = pygame.font.SysFont('Georgia', 24, bold = True)
 
         user_text = ''
+        score = 0
 
         boggle_squares = []
         square_side_length = 150
@@ -205,6 +231,7 @@ class Board_Screen():
             count+=1
         
         correct_words = ''
+
         entry_box = pygame.Rect(0,screen_height*3/4,screen_width/3,screen_height/4)
         text_box = pygame.Rect(0,0,screen_width/3,screen_height*3/4)
 
@@ -212,8 +239,8 @@ class Board_Screen():
         clock = pygame.time.Clock()
         secondTimer = 1000
         timeLimit = 1000*60*3
-        pygame.time.set_timer(pygame.QUIT,timeLimit,1)
-
+        #pygame.time.set_timer(pygame.QUIT,timeLimit,1)
+        done = False
 
         while running2:
             screen_boggle.fill(background_color)
@@ -221,22 +248,22 @@ class Board_Screen():
             clock.tick(60)
             timeLimit -= clock.get_time()
             secondTimer+=clock.get_time()
-            if(secondTimer>1000):
+            if(secondTimer>1000 and timeLimit>=0):
                 secondTimer-=1000
                 clock_text = font.render(str(timeLimit//60000)+":"+str((timeLimit//1000)%60),True,'White')
             screen_boggle.blit(clock_text,((screen_width*2/3)-40,30))
 
             pygame.draw.rect(screen_boggle,0,entry_box,2)
             pygame.draw.rect(screen_boggle,0,text_box,2)
-            #pygame.draw.line(screen, 0, (screen_width/3,0), (screen_width/3,screen_height), 4)
-            #pygame.draw.line(screen, 0, (0,(screen_height/4)*3), (screen_width/3,(screen_height/4)*3), 4)
 
             i=0
             for x in boggle_squares:
                 pygame.draw.rect(screen_boggle, 0, x, 2)
                 screen_boggle.blit(board_images[i],(x.x+40,x.y+40))
                 i+=1
-
+            if timeLimit<0 and not done and not players:
+                correct_words="You have a score of "+str(score)+" with the words: "+correct_words+". The computer has a score of "+str(len(ai_words.split()))+" with the words: "+ai_words
+                done = True
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -247,22 +274,19 @@ class Board_Screen():
                     if event.key == pygame.K_BACKSPACE:
                         # get text input from 0 to -1 i.e. end.
                         user_text = user_text[:-1]
-                    elif event.key ==pygame.K_RETURN:
+                    elif event.key ==pygame.K_RETURN and timeLimit>0:
                         print(boggle_game.check_word(user_text.upper()))
                         if(boggle_game.check_word(user_text.upper()) and not self.wordInString(correct_words,user_text.upper())):
                             correct_words=correct_words+" "+user_text.upper()
                             user_text=""
+                            score+=1
                     # Unicode standard is used for string
                     # formation
                     else:
                         user_text += event.unicode
-            entry_text = font.render(user_text, True, (255, 255, 255))
-            words_text = font.render(correct_words, True, (255, 255, 255))
             # render at position stated in arguments
             self.drawText(screen_boggle,user_text,'White',entry_box,font)
             self.drawText(screen_boggle,correct_words,'White',text_box,font)
-            #screen_boggle.blit(words_text, (text_box.x+5, text_box.y+5))
-            #screen_boggle.blit(entry_text, (entry_box.x+5, entry_box.y+5))
 
             a, b = pygame.mouse.get_pos()
             pygame.display.update()
