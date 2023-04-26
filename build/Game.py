@@ -162,9 +162,9 @@ class Start_Screen():
 
 
 class Board_Screen():
-    def __init__(self, players=False, setting=1, size=4):
+    def __init__(self, players=False, setting=1, size=4,boggle_game = Game()):
         self.CurrentState = False
-        boggle_game = Game()
+        
         boggle_game.print_solution()
         #AI and Two Players
         rand = Random()
