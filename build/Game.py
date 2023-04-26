@@ -161,9 +161,8 @@ class Start_Screen():
     
 
 class Board_Screen():
-    def __init__(self, players=False, setting=1, size=4,boggle_game = Game()):
+    def __init__(self, players=False, setting=1, size=4, boggle_game = Game()):
         self.CurrentState = False
-        
         boggle_game.print_solution()
         #AI and Two Players
         rand = Random()
@@ -239,10 +238,9 @@ class Board_Screen():
         
         clock = pygame.time.Clock()
         secondTimer = 1000
-        timeLimit = 1000*60*3
         #pygame.time.set_timer(pygame.QUIT,timeLimit,1)
         done = False
-        timeLimit = 1000*10#1000*60*3
+        timeLimit = 1000*5#*60*3
         pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
 
 
@@ -268,9 +266,12 @@ class Board_Screen():
             if timeLimit<0 and not done and not players:
                 correct_words="You have a score of "+str(score)+" with the words: "+correct_words+". The computer has a score of "+str(len(ai_words.split()))+" with the words: "+ai_words
                 done = True
+            elif timeLimit<0 and not done and players:
+
+                done = True
             for event in pygame.event.get():
                 if pygame.event.get(SCREENEVENT):
-                    Intermin_Screen()
+                    Intermin_Screen(boggle_game)
                     
                 if event.type == pygame.QUIT:
                     running = False
@@ -287,6 +288,8 @@ class Board_Screen():
                             correct_words=correct_words+" "+user_text.upper()
                             user_text=""
                             score+=1
+                    elif event.key == pygame.K_RETURN and timeLimit<0 and players:
+                        Intermin_Screen(boggle_game)
                     # Unicode standard is used for string
                     # formation
                     else:
@@ -352,7 +355,8 @@ class Board_Screen():
         return text
     
 class Intermin_Screen():
-    def __init__(self):
+    def __init__(self,boggle_game):
+        self.boggle_game = boggle_game
         pygame.display.quit()
         pygame.display.init()
         screen = pygame.display.set_mode((screen_width, screen_height))
@@ -375,6 +379,8 @@ class Intermin_Screen():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         pygame.display.quit()
+                        pygame.display.init()
+                        Board_Screen(True,1,4,self.boggle_game)
 
             pygame.draw.rect(screen, (background_color), title_rec)
             screen.blit(prompt_text1, (title_rec.x + 5, title_rec.y + 5))
