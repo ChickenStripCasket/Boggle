@@ -238,7 +238,7 @@ class Board_Screen():
         
         clock = pygame.time.Clock()
         secondTimer = 1000
-        timeLimit = 1000*5#*60*3
+        timeLimit = 1000*60*3
         done = False
         pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
 
