@@ -238,9 +238,9 @@ class Board_Screen():
         
         clock = pygame.time.Clock()
         secondTimer = 1000
-        #pygame.time.set_timer(pygame.QUIT,timeLimit,1)
+        timeLimit = 1000*60*3
+        pygame.time.set_timer(pygame.QUIT,timeLimit,1)
         done = False
-        timeLimit = 1000*5#*60*3
         pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
 
 
@@ -286,8 +286,17 @@ class Board_Screen():
                         print(boggle_game.check_word(user_text.upper()))
                         if(boggle_game.check_word(user_text.upper()) and not self.wordInString(correct_words,user_text.upper())):
                             correct_words=correct_words+" "+user_text.upper()
+                            if len(user_text) <=4:
+                                score += 1
+                            elif len(user_text) == 5:
+                                score += 2
+                            elif len(user_text) == 6:
+                                score += 3
+                            elif len(user_text) == 7:
+                                score += 5
+                            else:
+                                score += 11
                             user_text=""
-                            score+=1
                     elif event.key == pygame.K_RETURN and timeLimit<0 and players and not second_turn:
                         Intermin_Screen(boggle_game)
                     # Unicode standard is used for string
