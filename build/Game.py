@@ -240,7 +240,7 @@ class Board_Screen():
         secondTimer = 1000
         #pygame.time.set_timer(pygame.QUIT,timeLimit,1)
         done = False
-        timeLimit = 1000*5#*60*3
+        timeLimit = 1000*60*3
         pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
 
 
@@ -309,11 +309,11 @@ class Board_Screen():
     def wordInString(self,checkString,word):
         stringArray = []
         stringArray = checkString.split()
+        var = False
         for x in stringArray:
             if x == word:
-                return True
-            else:
-                return False
+                var = True
+        return var
     
     #method taken from https://www.pygame.org/wiki/TextWrap
     def drawText(self, surface, text, color, rect, font, aa=False, bkg=None):
