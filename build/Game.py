@@ -12,6 +12,19 @@ screen_width = 1000
 background_color = (0, 76, 153)
 pygame.init()
 
+def getScore(words:list, score:int):
+        for word in words:
+            if(len(word)<=4):
+                score+=1
+            elif(len(word)==5):
+                score+=2
+            elif(len(word)==6):
+                score+=3
+            elif(len(word)==7):
+                score+=5
+            elif(len(word)>7):
+                score+=11
+        return score
         
 class Start_Screen():
     def __init__(self):
@@ -238,8 +251,9 @@ class Board_Screen():
         
         clock = pygame.time.Clock()
         secondTimer = 1000
-        timeLimit = 1000*60*3
+        #pygame.time.set_timer(pygame.QUIT,timeLimit,1)
         done = False
+        timeLimit = 1000*60*3
         pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
 
 
@@ -263,7 +277,7 @@ class Board_Screen():
                 screen_boggle.blit(board_images[i],(x.x+40,x.y+40))
                 i+=1
             if timeLimit<0 and not done and not players:
-                correct_words="You have a score of "+str(score)+" with the words: "+correct_words+". The computer has a score of "+str(len(ai_words.split()))+" with the words: "+ai_words
+                correct_words="You have a score of "+str(getScore(correct_words.split(), 0))+" with the words: "+correct_words+". The computer has a score of "+str(getScore(ai_words.split(),0))+" with the words: "+ai_words
                 done = True
             elif timeLimit<0 and not done and players:
 
@@ -285,17 +299,9 @@ class Board_Screen():
                         print(boggle_game.check_word(user_text.upper()))
                         if(boggle_game.check_word(user_text.upper()) and not self.wordInString(correct_words,user_text.upper())):
                             correct_words=correct_words+" "+user_text.upper()
-                            if len(user_text) <=4:
-                                score += 1
-                            elif len(user_text) == 5:
-                                score += 2
-                            elif len(user_text) == 6:
-                                score += 3
-                            elif len(user_text) == 7:
-                                score += 5
-                            else:
-                                score += 11
+                            
                             user_text=""
+                            
                     elif event.key == pygame.K_RETURN and timeLimit<0 and players and not second_turn:
                         Intermin_Screen(boggle_game)
                     # Unicode standard is used for string
@@ -313,15 +319,16 @@ class Board_Screen():
         #pathToFile is just here so the files will display. I have no clue how to make the files display with specifying the whole filepath
         pathToFile="platformerGraphics_gui_text\\Individual\\"
         return pathToFile+"Upper_"+cha.upper()+".png"
+    
 
     def wordInString(self,checkString,word):
         stringArray = []
         stringArray = checkString.split()
-        var = False
         for x in stringArray:
             if x == word:
-                var = True
-        return var
+                return True
+            else:
+                return False
     
     #method taken from https://www.pygame.org/wiki/TextWrap
     def drawText(self, surface, text, color, rect, font, aa=False, bkg=None):
