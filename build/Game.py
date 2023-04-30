@@ -324,11 +324,11 @@ class Board_Screen():
     def wordInString(self,checkString,word):
         stringArray = []
         stringArray = checkString.split()
+        inString = False
         for x in stringArray:
             if x == word:
-                return True
-            else:
-                return False
+                inString = True
+        return inString
     
     #method taken from https://www.pygame.org/wiki/TextWrap
     def drawText(self, surface, text, color, rect, font, aa=False, bkg=None):
