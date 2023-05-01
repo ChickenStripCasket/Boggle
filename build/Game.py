@@ -174,7 +174,7 @@ class Start_Screen():
     
 
 class Board_Screen():
-    def __init__(self, players=False, setting=1, size=4, boggle_game = Game(), second_turn = False):
+    def __init__(self, players=False, setting=1, size=4, boggle_game = Game(), second_turn = False, p1Words = ""):
         self.CurrentState = False
         boggle_game.print_solution()
         #AI and Two Players
@@ -279,8 +279,15 @@ class Board_Screen():
             if timeLimit<0 and not done and not players:
                 correct_words="You have a score of "+str(getScore(correct_words.split(), 0))+" with the words: "+correct_words+". The computer has a score of "+str(getScore(ai_words.split(),0))+" with the words: "+ai_words
                 done = True
-            elif timeLimit<0 and not done and players:
-
+            elif timeLimit<0 and not done and players and second_turn:
+                p2Words = correct_words
+                correct_words ="Player 1 has a score of "+str(getScore(p1Words.split(), 0))+" with the words: "+p1Words+". Player 2 has a score of "+str(getScore(correct_words.split(),0))+" with the words: "+correct_words+"."
+                if getScore(p1Words.split(), 0) > getScore(p2Words.split(),0):
+                    correct_words+= " Player 1 Wins."
+                elif getScore(p1Words.split(), 0) < getScore(p2Words.split(),0):
+                    correct_words+= " Player 2 Wins."
+                else:
+                    correct_words+=" It's a tie!"
                 done = True
             for event in pygame.event.get():
                 if pygame.event.get(SCREENEVENT) and not second_turn:
@@ -303,7 +310,7 @@ class Board_Screen():
                             user_text=""
                             
                     elif event.key == pygame.K_RETURN and timeLimit<0 and players and not second_turn:
-                        Intermin_Screen(boggle_game)
+                        Intermin_Screen(boggle_game, correct_words)
                     # Unicode standard is used for string
                     # formation
                     else:
@@ -370,7 +377,7 @@ class Board_Screen():
         return text
     
 class Intermin_Screen():
-    def __init__(self,boggle_game):
+    def __init__(self,boggle_game, wordsFromP1):
         self.boggle_game = boggle_game
         pygame.display.quit()
         pygame.display.init()
@@ -395,7 +402,7 @@ class Intermin_Screen():
                     if event.key == pygame.K_RETURN:
                         pygame.display.quit()
                         pygame.display.init()
-                        Board_Screen(True, 1, 4, self.boggle_game, True)
+                        Board_Screen(True, 1, 4, self.boggle_game, True, wordsFromP1)
 
             pygame.draw.rect(screen, (background_color), title_rec)
             screen.blit(prompt_text1, (title_rec.x + 5, title_rec.y + 5))
