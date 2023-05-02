@@ -235,7 +235,7 @@ class Board_Screen():
         pygame.display.set_caption('Boggle!')
         pygame.display.flip()
 
-        font1 = pygame.font.SysFont('Georgia', 24, bold = True)
+        font = pygame.font.SysFont('Georgia', 24, bold = True)
 
         user_text = ''
         score = 0
@@ -261,7 +261,7 @@ class Board_Screen():
         secondTimer = 1000
         #pygame.time.set_timer(pygame.QUIT,timeLimit,1)
         done = False
-        timeLimit = 1000*5#*60*3
+        timeLimit = 1000*60*3
         pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
 
         playMusic()
@@ -274,7 +274,7 @@ class Board_Screen():
             secondTimer+=clock.get_time()
             if(secondTimer>1000 and timeLimit>=0):
                 secondTimer-=1000
-                clock_text = font1.render(str(timeLimit//60000)+":"+str((timeLimit//1000)%60),True,'White')
+                clock_text = font.render(str(timeLimit//60000)+":"+str((timeLimit//1000)%60),True,'White')
             screen_boggle.blit(clock_text,((screen_width*2/3)-40,30))
 
             pygame.draw.rect(screen_boggle,0,entry_box,2)
@@ -288,19 +288,16 @@ class Board_Screen():
             if timeLimit<0 and not done and not players:
                 correct_words="You have a score of "+str(getScore(correct_words.split(), 0))+" with the words: "+correct_words+". The computer has a score of "+str(getScore(ai_words.split(),0))+" with the words: "+ai_words
                 done = True
-
             elif timeLimit<0 and not done and players and second_turn:
                 p2Words = correct_words
                 correct_words ="Player 1 has a score of "+str(getScore(p1Words.split(), 0))+" with the words: "+p1Words+". Player 2 has a score of "+str(getScore(correct_words.split(),0))+" with the words: "+correct_words+"."
                 if getScore(p1Words.split(), 0) > getScore(p2Words.split(),0):
-                        correct_words+= " Player 1 Wins."
+                    correct_words+= " Player 1 Wins."
                 elif getScore(p1Words.split(), 0) < getScore(p2Words.split(),0):
-                        correct_words+= " Player 2 Wins."
+                    correct_words+= " Player 2 Wins."
                 else:
-                        correct_words+=" It's a tie!"
-                p2Words = correct_words
-                Two_Player_end_Screen(p2Words)
-                
+                    correct_words+=" It's a tie!"
+                done = True
             for event in pygame.event.get():
                 if pygame.event.get(SCREENEVENT) and not second_turn:
                     Intermin_Screen(boggle_game)
@@ -328,8 +325,8 @@ class Board_Screen():
                     else:
                         user_text += event.unicode
             # render at position stated in arguments
-            drawText(self,screen_boggle,user_text,'White',entry_box,font1)
-            drawText(self,screen_boggle,correct_words,'White',text_box,font1)
+            self.drawText(screen_boggle,user_text,'White',entry_box,font)
+            self.drawText(screen_boggle,correct_words,'White',text_box,font)
 
             a, b = pygame.mouse.get_pos()
             pygame.display.update()
@@ -349,50 +346,50 @@ class Board_Screen():
                 inString = True
         return inString
     
-#method taken from https://www.pygame.org/wiki/TextWrap
-def drawText(self, surface, text, color, rect, font, aa=False, bkg=None):
+    #method taken from https://www.pygame.org/wiki/TextWrap
+    def drawText(self, surface, text, color, rect, font, aa=False, bkg=None):
         rect = pygame.Rect(rect)
         y = rect.top
         lineSpacing = -2
 
-# get the height of the font
+        # get the height of the font
         fontHeight = font.size("Tg")[1]
 
         while text:
-                i = 1
+            i = 1
 
-                # determine if the row of text will be outside our area
-                if y + fontHeight > rect.bottom:
-                        break
-                
-                # determine maximum width of line
-                while font.size(text[:i])[0] < rect.width and i < len(text):
-                        i += 1
+            # determine if the row of text will be outside our area
+            if y + fontHeight > rect.bottom:
+                break
 
-                        # if we've wrapped the text, then adjust the wrap to the last word      
-                        if i < len(text): 
-                                i = text.rfind(" ", 0, i) + 1
+            # determine maximum width of line
+            while font.size(text[:i])[0] < rect.width and i < len(text):
+                i += 1
 
-                                # render the line and blit it to the surface
-                                if bkg:
-                                        image = font.render(text[:i], 1, color, bkg)
-                                        image.set_colorkey(bkg)
-                                else:
-                                        image = font.render(text[:i], aa, color)
-                                        surface.blit(image, (rect.left, y))
-                                        y += fontHeight + lineSpacing
-                                                
-                                        # remove the text we just blitted
-                                        text = text[i:]
-                                        return text
+            # if we've wrapped the text, then adjust the wrap to the last word      
+            if i < len(text): 
+                i = text.rfind(" ", 0, i) + 1
+
+            # render the line and blit it to the surface
+            if bkg:
+                image = font.render(text[:i], 1, color, bkg)
+                image.set_colorkey(bkg)
+            else:
+                image = font.render(text[:i], aa, color)
+
+            surface.blit(image, (rect.left, y))
+            y += fontHeight + lineSpacing
+
+            # remove the text we just blitted
+            text = text[i:]
+
+        return text
     
 class Intermin_Screen():
     def __init__(self,boggle_game, wordsFromP1):
         self.boggle_game = boggle_game
-
         pygame.display.quit()
         pygame.display.init()
-        pygame.mixer.quit()
         screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption('Player 2 prompt')
         pygame.display.flip()
@@ -405,63 +402,33 @@ class Intermin_Screen():
 
         running3 = True
         while running3:
-                screen.fill(background_color)
-                for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                                running3 = False
-                                pygame.quit()
-                        if event.type == pygame.KEYDOWN:
-                                if event.key == pygame.K_RETURN:
-                                        pygame.display.quit()
-                                        pygame.display.init()
-                                        Board_Screen(True, 1, 4, self.boggle_game, True, wordsFromP1)
+            screen.fill(background_color)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running3 = False
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        pygame.display.quit()
+                        pygame.display.init()
+                        Board_Screen(True, 1, 4, self.boggle_game, True, wordsFromP1)
 
-                pygame.draw.rect(screen, (background_color), title_rec)
-                screen.blit(prompt_text1, (title_rec.x + 5, title_rec.y + 5))
-                screen.blit(prompt_text2, (title_rec.x - 175, title_rec.y + 50))
+            pygame.draw.rect(screen, (background_color), title_rec)
+            screen.blit(prompt_text1, (title_rec.x + 5, title_rec.y + 5))
+            screen.blit(prompt_text2, (title_rec.x - 175, title_rec.y + 50))
             
-                pygame.display.update()
-
-class Two_Player_end_Screen():
-        def __init__(self, p2Words):
-                self.p2Words = p2Words
-                
-                pygame.display.quit()
-                pygame.display.init()
-                pygame.mixer.quit()
-                screen = pygame.display.set_mode((screen_width, screen_height))
-                pygame.display.set_caption('Good Game!')
-                pygame.display.flip()
-
-                font1 = pygame.font.SysFont('Georgia', 25, bold = True)
-                prompt_text1 = font1.render(self.p2Words, True, 'white')
-                title_rec = pygame.Rect(375, 100, 200, 60)
-
-                running4 = True
-                while running4:
-                        screen.fill(background_color)
-                        for event in pygame.event.get():
-                                if event.type == pygame.QUIT:
-                                        running4 = False
-                                        pygame.quit()
-
-                        pygame.draw.rect(screen, (background_color), title_rec)
-                        #screen.blit(prompt_text1, (title_rec.x + 5, title_rec.y + 5))
-                        drawText(self, screen, prompt_text1, 'white', title_rec, font1)
-                                                
-                        pygame.display.update()
+            pygame.display.update()
         
 
 
 done = False
 while not done:
-        #Intermin_Screen()
-        Start_Screen().screenUpdate()
-        #Two_Player_end_Screen('True')
-        for events in pygame.events.get():
-                if events.type == pygame.MOUSEBUTTONDOWN:
-                        if quit_button.collidepoint(events.pos):
-                                pygame.quit()
+    #Intermin_Screen()
+    Start_Screen().screenUpdate()
+    for events in pygame.events.get():
+        if events.type == pygame.MOUSEBUTTONDOWN:
+            if quit_button.collidepoint(events.pos):
+                pygame.quit()
 
 
                         
