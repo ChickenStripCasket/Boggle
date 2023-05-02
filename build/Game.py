@@ -1,6 +1,5 @@
 import pygame
 from pprint import pprint
-
 from random import Random
 from generate_board import generate_board
 from main import *
@@ -25,7 +24,16 @@ def getScore(words:list, score:int):
             elif(len(word)>7):
                 score+=11
         return score
-        
+
+def playMusic():
+    pygame.mixer.init()
+    
+    pygame.mixer.music.load("Killer Queen.wav")
+    
+    pygame.mixer.music.set_volume(.7)
+    
+    pygame.mixer.music.play()
+
 class Start_Screen():
     def __init__(self):
         self.CurrentState = False
@@ -256,8 +264,9 @@ class Board_Screen():
         timeLimit = 1000*60*3
         pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
 
-
+        playMusic()
         while running2:
+            
             screen_boggle.fill(background_color)
             #Clock prints time since start every second
             clock.tick(60)
