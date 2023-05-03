@@ -1,9 +1,12 @@
 # Boggle
 
+
 Standard Boggle Rules
-The classic version of Boggle, originally distributed by Parker Brothers, consists of a 4 x 4 grid with 16 dice. A single letter (except for “Qu,” noted below) is printed on each of the six sides of each die. You need at least two players. 
+The classic version of Boggle, originally distributed by Parker Brothers, consists of a 4 x 4 grid with 16 dice. A single letter (except for “Qu,” noted below) is printed on each of the six sides of each die. You need at least two players so we implemented a dumb AI player to make valid moves.
 
 To play:
+
+Run Game.py to start the game
 
 1 player mode:
     first select a difficulty (default is easy) and then select "1 player" icon to start
