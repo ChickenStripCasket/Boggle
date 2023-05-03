@@ -261,7 +261,7 @@ class Board_Screen():
         secondTimer = 1000
         #pygame.time.set_timer(pygame.QUIT,timeLimit,1)
         done = False
-        timeLimit = 1000*3
+        timeLimit = 1000*60*3
         pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
 
         playMusic()
