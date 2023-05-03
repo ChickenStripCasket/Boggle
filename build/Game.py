@@ -261,7 +261,7 @@ class Board_Screen():
         secondTimer = 1000
         #pygame.time.set_timer(pygame.QUIT,timeLimit,1)
         done = False
-        timeLimit = 1000*60*3
+        timeLimit = 1000*3
         pygame.time.set_timer(SCREENEVENT,timeLimit, 1)
 
         playMusic()
@@ -317,13 +317,13 @@ class Board_Screen():
                             correct_words=correct_words+" "+user_text.upper()
                             
                             user_text=""
-                            
-                    elif event.key == pygame.K_RETURN and timeLimit<0 and players and not second_turn:
-                        Intermin_Screen(boggle_game, correct_words)
                     # Unicode standard is used for string
                     # formation
-                    else:
+                    elif timeLimit>=0:
                         user_text += event.unicode
+                if timeLimit<=0 and players and not second_turn:
+                    Intermin_Screen(boggle_game, correct_words)
+                    
             # render at position stated in arguments
             self.drawText(screen_boggle,user_text,'White',entry_box,font)
             self.drawText(screen_boggle,correct_words,'White',text_box,font)
@@ -390,6 +390,7 @@ class Intermin_Screen():
         self.boggle_game = boggle_game
         pygame.display.quit()
         pygame.display.init()
+        pygame.mixer.quit()
         screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption('Player 2 prompt')
         pygame.display.flip()
@@ -418,8 +419,6 @@ class Intermin_Screen():
             screen.blit(prompt_text2, (title_rec.x - 175, title_rec.y + 50))
             
             pygame.display.update()
-        
-
 
 done = False
 while not done:
@@ -429,8 +428,6 @@ while not done:
         if events.type == pygame.MOUSEBUTTONDOWN:
             if quit_button.collidepoint(events.pos):
                 pygame.quit()
-
-
-                        
+                      
 #Start_Screen()
 #Board_Screen(True,1)
