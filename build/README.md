@@ -6,6 +6,10 @@ The classic version of Boggle, originally distributed by Parker Brothers, consis
 
 To play:
 
+run the following in cmd:
+    pip install pygame
+    pip install numpy
+    
 Run Game.py to start the game
 
 1 player mode:
